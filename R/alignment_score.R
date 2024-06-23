@@ -36,6 +36,7 @@
 #' \insertRef{butler2018integrating}{PLSDAbatch}
 #'
 #' @examples
+#' if (requireNamespace("TreeSummarizedExperiment")) {
 #' library(TreeSummarizedExperiment) # for functions assays(),rowData()
 #' data('sponge_data')
 #' X <- assays(sponge_data)$Clr_value # centered log ratio transformed data
@@ -43,7 +44,7 @@
 #' names(batch) <- rownames(sponge_data)
 #'
 #' alignment_score(data = X, batch = batch, var = 0.95, k = 3, ncomp = 20)
-#'
+#' }
 #' @export
 alignment_score <- function(data,
                             batch,
@@ -51,7 +52,7 @@ alignment_score <- function(data,
                             k = round(0.1*nrow(data)),
                             ncomp = 20){
 
-    pca.res <- pca(X = data, ncomp = ncomp, scale = TRUE)
+    pca.res <- mixOmics::pca(X = data, ncomp = ncomp, scale = TRUE)
     ncomp.use <- sum(cumsum(pca.res$prop_expl_var$X) < var)
     dist.mat <- as.matrix(dist(pca.res$variates$X[,seq_len(ncomp.use)],
                                 upper = TRUE, diag = TRUE))
